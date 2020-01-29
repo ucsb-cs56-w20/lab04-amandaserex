@@ -138,12 +138,13 @@ public class OperationsController {
     @GetMapping("/divide/results")
     public String getDivisionResult(Model model, @Valid RatCalcForm ratCalcForm, BindingResult bindingResult){
         logger.info("getDivisionResult ratCalcForm=" +ratCalcForm);
-        ratCalcForm.setOp("X");
+        ratCalcForm.setOp("/");
 
         if(!bindingResult.hasErrors() && !checkDenominatorErrors(ratCalcForm)) {
             Rational r1 = new Rational(ratCalcForm.getNum1(), ratCalcForm.getDenom1());
             Rational r2 = new Rational(ratCalcForm.getNum2(), ratCalcForm.getDenom2());
-            Rational result = Rational.quotient(r1,r2);
+            checkDivideByZero(ratCalcForm);
+	    Rational result = Rational.quotient(r1,r2);
             logger.info("r1=" + r1 + " r2=" + r2 + " result=" + result);
             ratCalcForm.setNumResult(result.getNumerator());
             ratCalcForm.setDenomResult(result.getDenominator());
